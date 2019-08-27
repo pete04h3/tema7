@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="content">
+        <div><a href="https://kea.dk">https://kea.dk</a></div>
+        <div><a href="https://github.com/pete04h3">https://github.com/pete04h3</a></div>
+        <div><img src="http://mabe-kea.dk/E19/pics/frog.png" alt="billede af frø"></div>
+
+
+    </div>
+
+
+
+</body>
+<script>
+    const content = document.querySelector("#content");
+    const første = document.querySelector("#content div");
+    const anden = document.querySelector("#content div + div");
+    const sidste = document.querySelector("#content div + div + div img");
+
+    console.log(content);
+    console.log(første);
+    console.log(anden);
+    console.log(sidste);
+
+</script>
+
+</html>
