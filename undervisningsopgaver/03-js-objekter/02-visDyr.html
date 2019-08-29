@@ -11,6 +11,9 @@
 <body>
 
     <article>
+        <h1></h1>
+        <img src="" alt="">
+
 
 
 
@@ -19,17 +22,27 @@
 
     <script>
         document.querySelector("DOMContentLoaded", start);
-        console.log("DOM Loaded")
 
         function start() {
-            let dyr = {
-                "Dyr": "Gris",
-                "Type": "Pattedyr",
-                "levested": "Svinefarme"
-
-            }
+            console.log("DOM Loaded")
 
 
         }
+
+        let dyr = {
+            "dyr": "gris",
+            "type": "pattedyr",
+            "levested": "svinefarm",
+            "billede": "http://mabe-kea.dk/E19/pics/pig.png"
+        }
+
+        const h1Container = document.querySelector("h1");
+        const billedeContainer = document.querySelector("img").src = dyr.billede;
+
+        let tekst = `Dyr: ${dyr.dyr} Type: ${dyr.type} Levested: ${dyr.levested}`;
+
+
+        h1Container.innerHTML = tekst;
+        billedeContainer.innerHTML = `${dyr.billede}`;
     </script>
 </body></html>
