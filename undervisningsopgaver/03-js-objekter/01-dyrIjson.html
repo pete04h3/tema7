@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link rel="stylesheet" href="">
+
+    <style>
+        img {
+            width: 100%;
+        }
+
+        .data-container {
+            display: grid;
+            grid-gap: 10px;
+            /*grid-template-columns: repeat(3, 1fr);*/
+        }
+
+        article {
+            border: 1px solid black;
+        }
+
+        @media screen and (min-width:600px) {
+            .data-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media screen and (min-width:1000px) {
+            .data-container {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <section class="data-container"></section>
+    <template>
+
+        <article>
+            <h1 class="navn"></h1>
+            <img class="img" src="" alt="">
+            <p class="type"></p>
+            <p class="levested"></p>
+
+
+
+
+
+        </article>
+    </template>
+
+
+    <script>
+        let dyr = [];
+        document.addEventListener("DOMContentLoaded", start);
+        async function getJson() {
+            let jsonData = await fetch("dyr.json");
+            dyr = await jsonData.json();
+            visDyrJson();
+        }
+
+
+        function start() {
+            console.log("DOM Loaded");
+            getJson();
+
+
+        }
+
+        function visDyrJson() {
+
+            const container = document.querySelector(".data-container");
+            const dyrTemplate = document.querySelector("template");
+
+            dyr.forEach(dyr => {
+
+                let klon = dyrTemplate.cloneNode(true).content;
+                klon.querySelector("h1").textContent = dyr.navn;
+                klon.querySelector(".img").src = dyr.billede;
+                klon.querySelector(".type").textContent = dyr.type;
+                klon.querySelector(".levested").textContent = dyr.levested;
+                container.appendChild(klon);
+            })
+
+
+
+        }
+    </script>
+</body></html>
