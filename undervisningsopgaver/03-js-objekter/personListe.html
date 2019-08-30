@@ -22,11 +22,11 @@
         }
 
         html {
-            background-color: rgba(0, 0, 0, 0.76);
+            background-color: rgba(137, 137, 137, 0.74);
         }
 
         a {
-            color: #9aff00;
+            color: blue;
             font-size: 1.3rem;
             text-decoration: none;
             cursor: pointer;
@@ -44,11 +44,22 @@
         }
 
         article {
-            border: 2px solid white;
+            border: 8px solid white;
             color: aliceblue;
             padding: 10px;
             text-align: center;
         }
+
+        article:nth-child(even) {
+            background: #74ddac;
+        }
+
+
+        article:nth-child(odd) {
+            background: rgb(252, 149, 177);
+        }
+
+
 
         @media screen and (min-width:600px) {
             .data-container {
@@ -73,7 +84,7 @@
         <article>
             <h2 class="navn"></h2>
             <img class="billede" src="" alt="">
-            <a href="" class="github"></a>
+            <a href="" target="_blank" class="github"></a>
 
 
 
