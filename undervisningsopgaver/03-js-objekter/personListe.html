@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-    <html lang="en">
+<html lang="en">
 
-    <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Persongalleri</title>
@@ -23,6 +23,14 @@
 
         html {
             background-color: rgba(0, 0, 0, 0.76);
+        }
+
+        a {
+            color: #9aff00;
+            font-size: 1.3rem;
+            text-decoration: none;
+            cursor: pointer;
+
         }
 
         img {
@@ -103,8 +111,9 @@
                 let klon = personTemplate.cloneNode(true).content;
                 klon.querySelector("h2").textContent = person.gsx$navn.$t;
                 klon.querySelector(".billede").src = person.gsx$billede.$t;
-                console.log("anker tag", klon.querySelector(".github"))
-                klon.querySelector(".github").ahref = person.gsx$github.$t;
+                console.log("anker tag", klon.querySelector(".github"));
+                klon.querySelector(".github").textContent = person.gsx$github.$t;
+                klon.querySelector(".github").href = `https://github.com/${person.gsx$github.$t}`;
 
                 container.appendChild(klon);
                 console.log(klon)
@@ -112,4 +121,3 @@
         }
     </script>
 </body></html>
-
