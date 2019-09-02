@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Persongalleri</title>
+    <link rel="stylesheet" href="">
+
+    <style>
+        h1 {
+            color: ghostwhite;
+            font-size: 3rem;
+            margin: 0 auto;
+            text-align: center;
+            padding: 20px;
+            border: 4px solid black;
+            width: 300px;
+            height: 50px;
+            margin-bottom: 20px;
+
+        }
+
+        html {
+            background-color: rgba(137, 137, 137, 0.74);
+        }
+
+        a {
+            color: blue;
+            font-size: 1.3rem;
+            text-decoration: none;
+            cursor: pointer;
+
+        }
+
+        img {
+            width: 100%;
+        }
+
+        .data-container {
+            display: grid;
+            grid-gap: 10px;
+            /*grid-template-columns: repeat(3, 1fr);*/
+        }
+
+        article {
+            border: 8px solid white;
+            color: aliceblue;
+            padding: 10px;
+            text-align: center;
+        }
+
+        article:nth-child(even) {
+            background: #74ddac;
+        }
+
+
+        article:nth-child(odd) {
+            background: rgb(252, 149, 177);
+        }
+
+        header {
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .valgt {
+            background-color: red;
+        }
+
+
+
+        @media screen and (min-width:600px) {
+            .data-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media screen and (min-width:1000px) {
+            .data-container {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <h1>Persongalleri</h1>
+    <header>
+        <button class="filter valgt" data-køn="alle">Alle</button>
+        <button class="filter" data-køn="m">Mænd</button>
+        <button class="filter" data-køn="k">Kvinder</button>
+        <button class="filter" data-køn="andet">Andet</button>
+
+    </header>
+
+    <section class="data-container"></section>
+    <template>
+
+        <article>
+            <h2 class="navn"></h2>
+            <img class="billede" src="" alt="">
+            <a href="" target="_blank" class="github"></a>
+
+
+
+
+
+        </article>
+    </template>
+
+
+    <script>
+        let personer = [];
+        let filter = "k";
+        const container = document.querySelector(".data-container");
+        const personTemplate = document.querySelector("template");
+
+        document.addEventListener("DOMContentLoaded", getJson);
+
+        async function getJson() {
+            let jsonData = await fetch("https://spreadsheets.google.com/feeds/list/1Xge7slZ9dEOTCn1Yxl3OE4xgvrXOL8Y_iu3WN1yGB1U/od6/public/values?alt=json");
+            console.log(jsonData)
+            personer = await jsonData.json();
+            console.log(personer)
+            visPersoner();
+            addEventListenersToButtons();
+
+        }
+
+
+        function visPersoner() {
+            container.innerHTML = "";
+            personer.feed.entry.forEach(person => {
+                if (filter == "alle" || filter == person.gsx$køn.$t) {
+                    person.gsx$navn.$t;
+                    person.gsx$github.$t;
+                    person.gsx$billede.$t;
+                    person.gsx$alder.$t;
+                    console.log(person)
+
+                    let klon = personTemplate.cloneNode(true).content;
+                    klon.querySelector("h2").textContent = person.gsx$navn.$t;
+                    klon.querySelector(".billede").src = person.gsx$billede.$t;
+                    console.log("anker tag", klon.querySelector(".github"));
+                    klon.querySelector(".github").textContent = person.gsx$github.$t;
+                    klon.querySelector(".github").href = `https://github.com/${person.gsx$github.$t}`;
+
+                    container.appendChild(klon);
+                    console.log(klon)
+                }
+            })
+        }
+
+        function addEventListenersToButtons() {
+            document.querySelectorAll(".filter").forEach(elm => {
+                elm.addEventListener("click", filtrering);
+
+            })
+        }
+
+        function filtrering() {
+            document.querySelectorAll("button").forEach(elm => {
+                elm.classList.remove("valgt");
+            })
+            this.classList.add("valgt");
+            filter = this.dataset.køn;
+            visPersoner();
+        }
+    </script>
+</body></html>
