@@ -80,6 +80,21 @@
             width: 100vw;
             height: 100vh;
             background: rgba(0, 0, 0, .7);
+            display: none;
+        }
+
+        .indhold {
+            width: 70vw;
+            min-height: 50vh;
+            background: #fff;
+            margin: 4rem auto;
+            padding: 10px;
+        }
+
+        .luk {
+            position: fixed;
+            right: 0;
+            font-size: 2rem;
         }
 
 
@@ -125,7 +140,18 @@
         </article>
     </template>
 
-    <div id="popup"></div>
+    <div id="popup">
+        <button class="luk">X</button>
+        <section class="indhold">
+            <article class="enkeltPerson">
+                <h2></h2>
+                <img class="billede" src="" alt="">
+                <p class="historie">Historie: </p>
+                <p> Github: <a class="github" href=""></a></p>
+            </article>
+        </section>
+
+    </div>
 
 
     <script>
@@ -166,6 +192,9 @@
 
                     container.appendChild(klon);
                     console.log(klon)
+                    container.lastElementChild.addEventListener("click", () => {
+                        visSingle(person)
+                    });
                 }
             })
         }
@@ -175,6 +204,23 @@
                 elm.addEventListener("click", filtrering);
 
             })
+        }
+
+        function visSingle(person) {
+            document.querySelector("#popup").style.display = "block";
+            document.querySelector("#popup .luk").addEventListener("click", lukSingle);
+
+            document.querySelector(".enkeltPerson h2").textContent = person.gsx$navn.$t;
+            document.querySelector(".enkeltPerson .billede").src = person.gsx$billede.$t;
+            document.querySelector(".enkeltPerson .billede").alt = person.gsx$navn.$t;
+            document.querySelector(".enkeltPerson .github").href = `http://github.com/${person.gsx$github.$t}`;
+            document.querySelector(".enkeltPerson .github").textContent = `http://github.com/${person.gsx$github.$t}`;
+            document.querySelector(".enkeltPerson .historie").textContent = person.gsx$historie.$t;
+
+        }
+
+        function lukSingle() {
+            document.querySelector("#popup").style.display = "none";
         }
 
         function filtrering() {
