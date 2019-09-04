@@ -201,7 +201,7 @@
 
     <script>
         let personer = [];
-        let filter = "alle";
+        let filter = "menu";
         const container = document.querySelector(".data-container");
         const personTemplate = document.querySelector("template");
 
@@ -222,7 +222,7 @@
         function visPersoner() {
             container.innerHTML = "";
             personer.feed.entry.forEach(person => {
-                if (filter == "alle" || filter == person.gsx$kategori.$t) {
+                if (filter == "menu" || filter == person.gsx$kategori.$t) {
 
                     console.log(person)
 
