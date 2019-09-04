@@ -14,11 +14,16 @@
         background: #fff;
         margin: 4rem auto;
         padding: 10px;
+        border: 8px solid black;
     }
 
     .luk {
-        font-size: 2rem;
+        font-size: 1rem;
         cursor: pointer;
+        position: fixed;
+        top: 40px;
+        left: 65px;
+
     }
 
     #single {
@@ -26,12 +31,23 @@
         top: 0;
         width: 100vw;
         height: 100vh;
-        background: rgba(0, 0, 0, .7);
+        background: rgba(139, 152, 136, 0.57);
+
+    }
+
+    .underoverskrift {
+        font-weight: bold;
+
+    }
+
+    .pris {
+        font-style: italic;
     }
 
     img {
         width: 100%;
     }
+
 </style>
 
 
@@ -40,10 +56,13 @@
         <button class="luk">Tilbage</button>
         <section class="indhold">
             <article class="enkeltPerson">
-                <h2></h2>
+                <h2 class="navn"></h2>
                 <img class="billede" src="" alt="">
-                <p>Github:<a class="github" href=""></a></p>
-                <p class="historie"></p>
+                <p class="underoverskrift">Beskrivelse:</p>
+                <p class="lang"> </p>
+                <p class="underoverskrift">Oprindelse: </p>
+                <p class="oprindelse"> </p>
+                <p class="pris"></p>
             </article>
         </section>
 
@@ -54,12 +73,13 @@
 
     <script>
         let urlParams = new URLSearchParams(window.location.search);
-        let github = urlParams.get("github");
+        let id = urlParams.get("id");
+        let personer;
         document.addEventListener("DOMContentLoaded", getJson);
 
 
         async function getJson() {
-            let jsonData = await fetch("https://spreadsheets.google.com/feeds/list/1Xge7slZ9dEOTCn1Yxl3OE4xgvrXOL8Y_iu3WN1yGB1U/od6/public/values?alt=json");
+            let jsonData = await fetch("https://spreadsheets.google.com/feeds/list/17Dd7DvkPaFamNUdUKlrFgnH6POvBJXac7qyiS6zNRw0/od6/public/values?alt=json");
             personer = await jsonData.json();
             visPerson();
         }
@@ -68,17 +88,17 @@
 
         function visPerson() {
             personer.feed.entry.forEach(person => {
-                if (person.gsx$github.$t == github) {
-                    document.querySelector("h2").textContent = person.gsx$navn.$t;
-                    document.querySelector(".billede").src = person.gsx$billede.$t;
-                    document.querySelector(".billede").alt = person.gsx$navn.$t;
-                    document.querySelector(".github").href = `http://github.com/${person.gsx$github.$t}`;
-                    document.querySelector(".github").textContent = `http://github.com/${person.gsx$github.$t}`;
-                    document.querySelector(".historie").textContent = person.gsx$historie.$t;
+                if (person.gsx$id.$t == id) {
+                    document.querySelector(".enkeltPerson h2").textContent = person.gsx$navn.$t;
+                    document.querySelector(".enkeltPerson .billede").src = `imgs/large/${
+                                person.gsx$billede.$t
+                            }.jpg `;
+                    document.querySelector(".enkeltPerson .billede").alt = person.gsx$navn.$t;
+                    document.querySelector(".enkeltPerson .lang").textContent = person.gsx$lang.$t
+                    document.querySelector(".enkeltPerson .oprindelse").textContent = person.gsx$oprindelse.$t;
+                    document.querySelector(".enkeltPerson .pris").textContent = `Pris: ${person.gsx$pris.$t} kr`;
 
-
-
-                }
+                };
             })
 
 
@@ -88,5 +108,8 @@
         document.querySelector(".luk").addEventListener("click", () => {
             history.back();
         })
+
     </script>
-</body></html>
+</body>
+
+</html>

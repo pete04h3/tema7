@@ -4,38 +4,46 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Persongalleri</title>
+    <title>Babushka</title>
     <link rel="stylesheet" href="">
 
     <style>
         h1 {
-            color: ghostwhite;
-            font-size: 3rem;
+            color: black;
+            font-size: 2.6rem;
             margin: 0 auto;
             text-align: center;
-            padding: 20px;
+            padding: 10px;
             border: 4px solid black;
             width: 300px;
             height: 50px;
             margin-bottom: 20px;
+            margin-top: 20px;
 
         }
 
         h2 {
-            color: ghostwhite;
-            text-align: center;
+            color: black;
+            text-align: left;
 
         }
 
         html {
-            background-color: rgba(137, 137, 137, 0.74);
+            background-color: white;
         }
 
         a {
-            color: blue;
+            color: black;
             font-size: 1.3rem;
             text-decoration: none;
             cursor: pointer;
+
+        }
+
+        .splash {
+            background-image: url(pugacheva-01-500x430.jpg);
+            width: 100%;
+            height: 50vh;
 
         }
 
@@ -57,12 +65,14 @@
         }
 
         article:nth-child(even) {
-            background: #74ddac;
+            background: lightgrey;
+            border: 2px solid black;
         }
 
 
         article:nth-child(odd) {
-            background: rgb(252, 149, 177);
+            background: white;
+            border: 2px solid black
         }
 
         nav {
@@ -71,10 +81,30 @@
         }
 
         .valgt {
-            background-color: red;
+            background-color: darkgrey;
         }
 
-        /*      #popup {
+        .pris {
+            font-style: italic;
+            color: black;
+        }
+
+
+        p {
+            color: black;
+            text-align: left;
+        }
+
+        h4 {
+            color: black;
+            text-align: left;
+        }
+
+        .beskrivelse {
+            font-size: 1.5rem;
+        }
+
+        #popup {
             position: fixed;
             top: 0;
             width: 100vw;
@@ -93,9 +123,9 @@
 
         .luk {
             position: fixed;
-            right: 0;
-            font-size: 2rem;
-        }*/
+            right: 55px;
+            top: 64px;
+        }
 
 
 
@@ -107,7 +137,7 @@
 
         @media screen and (min-width:1000px) {
             .data-container {
-                grid-template-columns: repeat(4, 1fr);
+                grid-template-columns: repeat(3, 1fr);
             }
         }
     </style>
@@ -115,15 +145,25 @@
 </head>
 
 <body>
-    <h1>Persongalleri</h1>
-    <h2>Alle</h2>
-    <nav>
-        <button class="filter valgt" data-køn="alle">Alle</button>
-        <button class="filter" data-køn="m">Mænd</button>
-        <button class="filter" data-køn="k">Kvinder</button>
-        <button class="filter" data-køn="andet">Andet</button>
+    <img class="splash">
+    <h1>Bistro Babushka</h1>
+    <header>
+        <nav>
+            <button class="filter valgt" data-køn="menu">Menu</button>
+            <button class="filter" data-køn="forretter">Forretter</button>
+            <button class="filter" data-køn="hovedretter">Hovedretter</button>
+            <button class="filter" data-køn="desserter">Desserter</button>
+            <button class="filter" data-køn="drikkevarer">Drikkevarer</button>
 
-    </nav>
+
+        </nav>
+
+
+
+
+
+    </header>
+    <h2>Menu</h2>
 
     <section class="data-container"></section>
     <template>
@@ -131,7 +171,9 @@
         <article>
             <h2 class="navn"></h2>
             <img class="billede" src="" alt="">
-            <a href="" target="_blank" class="github"></a>
+
+            <p class="kort"></p>
+            <p class="pris"></p>
 
 
 
@@ -140,30 +182,20 @@
         </article>
     </template>
 
-    <!-- <div id="popup">
-        <button class="luk">X</button>
-        <section class="indhold">
-            <article class="enkeltPerson">
-                <h2></h2>
-                <img class="billede" src="" alt="">
-                <p class="historie">Historie: </p>
-                <p> Github: <a class="github" href=""></a></p>
-            </article>
-        </section>
 
-    </div>-->
 
 
     <script>
         let personer = [];
-        let filter = "k";
+        let filter = "alle";
         const container = document.querySelector(".data-container");
         const personTemplate = document.querySelector("template");
 
         document.addEventListener("DOMContentLoaded", getJson);
 
         async function getJson() {
-            let jsonData = await fetch("https://spreadsheets.google.com/feeds/list/1Xge7slZ9dEOTCn1Yxl3OE4xgvrXOL8Y_iu3WN1yGB1U/od6/public/values?alt=json");
+            let jsonData = await fetch("https://spreadsheets.google.com/feeds/list/17Dd7DvkPaFamNUdUKlrFgnH6POvBJXac7qyiS6zNRw0/od6/public/values?alt=json");
+
             console.log(jsonData)
             personer = await jsonData.json();
             console.log(personer)
@@ -176,24 +208,23 @@
         function visPersoner() {
             container.innerHTML = "";
             personer.feed.entry.forEach(person => {
-                if (filter == "alle" || filter == person.gsx$køn.$t) {
-                    person.gsx$navn.$t;
-                    person.gsx$github.$t;
-                    person.gsx$billede.$t;
-                    person.gsx$alder.$t;
+                if (filter == "alle" || filter == person.gsx$kategori.$t) {
+
                     console.log(person)
 
                     let klon = personTemplate.cloneNode(true).content;
                     klon.querySelector("h2").textContent = person.gsx$navn.$t;
-                    klon.querySelector(".billede").src = person.gsx$billede.$t;
-                    console.log("anker tag", klon.querySelector(".github"));
-                    klon.querySelector(".github").textContent = person.gsx$github.$t;
-                    klon.querySelector(".github").href = `https://github.com/${person.gsx$github.$t}`;
+                    klon.querySelector(".billede").src = `imgs/large/${person.gsx$billede.$t}.jpg`;
+
+                    klon.querySelector(".kort").textContent = person.gsx$kort.$t;
+                    klon.querySelector(".pris").textContent = `Pris: ${person.gsx$pris.$t} kr`;
+
+
 
                     container.appendChild(klon);
                     console.log(klon)
                     container.lastElementChild.addEventListener("click", () => {
-                        location.href = `06-singleViewbabushka.html?github=${person.gsx$github.$t}`;
+                        location.href = `06-singleViewbabushka.html?id=${person.gsx$id.$t}`;
                     });
                 }
             })
@@ -207,23 +238,33 @@
         }
 
         function visSingle(person) {
-            /* document.querySelector("#popup").style.display = "block";
-             document.querySelector("#popup .luk").addEventListener("click", lukSingle);*/
+            document.querySelector("#popup").style.display = "block";
+            document.querySelector("#popup .luk").addEventListener("click", lukSingle);
 
             document.querySelector(".enkeltPerson h2").textContent = person.gsx$navn.$t;
-            document.querySelector(".enkeltPerson .billede").src = person.gsx$billede.$t;
+            document.querySelector(".enkeltPerson .billede").src = `imgs/large/${
+                                person.gsx$billede.$t
+                            }.jpg `;
             document.querySelector(".enkeltPerson .billede").alt = person.gsx$navn.$t;
-            document.querySelector(".enkeltPerson .github").href = `http://github.com/${person.gsx$github.$t}`;
-            document.querySelector(".enkeltPerson .github").textContent = `http://github.com/${person.gsx$github.$t}`;
-            document.querySelector(".enkeltPerson .historie").textContent = person.gsx$historie.$t;
+            document.querySelector(".enkeltPerson .lang").textContent = person.gsx$lang.$t
+            document.querySelector(".enkeltPerson .oprindelse").textContent = person.gsx$oprindelse.$t;
+            document.querySelector(".enkeltPerson .pris").textContent = `Pris: ${person.gsx$pris.$t} kr`;
 
+        };
+
+
+
+
+
+
+
+
+        function lukSingle() {
+            document.querySelector("#popup").style.display = "none";
         }
 
-        /*  function lukSingle() {
-              document.querySelector("#popup").style.display = "none";
-          }*/
-
         function filtrering() {
+
             document.querySelectorAll("button").forEach(elm => {
                 elm.classList.remove("valgt");
             })
