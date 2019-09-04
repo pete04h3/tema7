@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Babushka</title>
+    <link rel="stylesheet" href="">
+
+    <style>
+        h1 {
+            color: black;
+            font-size: 2.6rem;
+            margin: 0 auto;
+            text-align: center;
+            padding: 10px;
+            border: 4px solid black;
+            width: 300px;
+            height: 50px;
+            margin-bottom: 20px;
+            margin-top: 20px;
+
+        }
+
+        h2 {
+            color: black;
+            text-align: left;
+
+        }
+
+        html {
+            background-color: white;
+        }
+
+        a {
+            color: black;
+            font-size: 1.3rem;
+            text-decoration: none;
+            cursor: pointer;
+
+        }
+
+        .splash {
+            background-image: url(pugacheva-01-500x430.jpg);
+            width: 100%;
+            height: 50vh;
+
+        }
+
+        img {
+            width: 100%;
+        }
+
+        .data-container {
+            display: grid;
+            grid-gap: 10px;
+            /*grid-template-columns: repeat(3, 1fr);*/
+        }
+
+        article {
+            border: 8px solid white;
+            color: aliceblue;
+            padding: 10px;
+            text-align: center;
+        }
+
+        article:nth-child(even) {
+            background: lightgrey;
+            border: 2px solid black;
+        }
+
+
+        article:nth-child(odd) {
+            background: white;
+            border: 2px solid black
+        }
+
+        nav {
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .valgt {
+            background-color: darkgrey;
+        }
+
+        .pris {
+            font-style: italic;
+            color: black;
+        }
+
+
+        p {
+            color: black;
+            text-align: left;
+        }
+
+        h4 {
+            color: black;
+            text-align: left;
+        }
+
+        .beskrivelse {
+            font-size: 1.5rem;
+        }
+
+        #popup {
+            position: fixed;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, .7);
+            display: none;
+        }
+
+        .indhold {
+            width: 70vw;
+            min-height: 50vh;
+            background: #fff;
+            margin: 4rem auto;
+            padding: 10px;
+        }
+
+        .luk {
+            position: fixed;
+            right: 55px;
+            top: 64px;
+        }
+
+
+
+        @media screen and (min-width:600px) {
+            .data-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media screen and (min-width:1000px) {
+            .data-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+    <img class="splash">
+    <h1>Bistro Babushka</h1>
+    <header>
+        <nav>
+            <button class="filter valgt" data-køn="alle">Alle</button>
+            <button class="filter" data-køn="forretter">Forretter</button>
+            <button class="filter" data-køn="hovedretter">Hovedretter</button>
+            <button class="filter" data-køn="desserter">Desserter</button>
+            <button class="filter" data-køn="drikkevarer">Drikkevarer</button>
+
+
+        </nav>
+
+
+
+
+
+    </header>
+    <h2>Menu</h2>
+
+    <section class="data-container"></section>
+    <template>
+
+        <article>
+            <h2 class="navn"></h2>
+            <img class="billede" src="" alt="">
+
+            <p class="kort"></p>
+            <p class="pris"></p>
+
+
+
+
+
+        </article>
+    </template>
+
+    <div id="popup">
+        <button class="luk">X</button>
+        <section class="indhold">
+            <article class="enkeltPerson">
+                <h2></h2>
+                <img class="billede" src="" alt="">
+                <h4 class="underoverskrift">Beskrivelse:</h4>
+                <p class="lang"></p>
+                <h4>Oprindelse:</h4>
+                <p class="oprindelse"></p>
+                <p class="pris"></p>
+            </article>
+        </section>
+
+    </div>
+
+
+    <script>
+        let personer = [];
+        let filter = "alle";
+        const container = document.querySelector(".data-container");
+        const personTemplate = document.querySelector("template");
+
+        document.addEventListener("DOMContentLoaded", getJson);
+
+        async function getJson() {
+            let jsonData = await fetch("https://spreadsheets.google.com/feeds/list/17Dd7DvkPaFamNUdUKlrFgnH6POvBJXac7qyiS6zNRw0/od6/public/values?alt=json");
+
+            console.log(jsonData)
+            personer = await jsonData.json();
+            console.log(personer)
+            visPersoner();
+            addEventListenersToButtons();
+
+        }
+
+
+        function visPersoner() {
+            container.innerHTML = "";
+            personer.feed.entry.forEach(person => {
+                if (filter == "alle" || filter == person.gsx$kategori.$t) {
+
+                    console.log(person)
+
+                    let klon = personTemplate.cloneNode(true).content;
+                    klon.querySelector("h2").textContent = person.gsx$navn.$t;
+                    klon.querySelector(".billede").src = `imgs/large/${person.gsx$billede.$t}.jpg`;
+
+                    klon.querySelector(".kort").textContent = person.gsx$kort.$t;
+                    klon.querySelector(".pris").textContent = `Pris: ${person.gsx$pris.$t} kr`;
+
+
+
+                    container.appendChild(klon);
+                    console.log(klon)
+                    container.lastElementChild.addEventListener("click", () => {
+                        visSingle(person)
+                    });
+                }
+            })
+        }
+
+        function addEventListenersToButtons() {
+            document.querySelectorAll(".filter").forEach(elm => {
+                elm.addEventListener("click", filtrering);
+
+            })
+        }
+
+        function visSingle(person) {
+            document.querySelector("#popup").style.display = "block";
+            document.querySelector("#popup .luk").addEventListener("click", lukSingle);
+
+            document.querySelector(".enkeltPerson h2").textContent = person.gsx$navn.$t;
+            document.querySelector(".enkeltPerson .billede").src = `imgs/large/${
+                                person.gsx$billede.$t
+                            }.jpg `;
+            document.querySelector(".enkeltPerson .billede").alt = person.gsx$navn.$t;
+            document.querySelector(".enkeltPerson .lang").textContent = person.gsx$lang.$t
+            document.querySelector(".enkeltPerson .oprindelse").textContent = person.gsx$oprindelse.$t;
+            document.querySelector(".enkeltPerson .pris").textContent = `Pris: ${person.gsx$pris.$t} kr`;
+
+        };
+
+
+
+
+
+
+
+
+        function lukSingle() {
+            document.querySelector("#popup").style.display = "none";
+        }
+
+        function filtrering() {
+
+            document.querySelectorAll("button").forEach(elm => {
+                elm.classList.remove("valgt");
+            })
+            this.classList.add("valgt");
+            filter = this.dataset.køn;
+            document.querySelector("h2").textContent = this.textContent;
+            visPersoner();
+        }
+    </script>
+</body></html>
