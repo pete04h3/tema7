@@ -187,7 +187,7 @@
 
     <script>
         let personer = [];
-        let filter = "alle";
+        let filter = "menu";
         const container = document.querySelector(".data-container");
         const personTemplate = document.querySelector("template");
 
@@ -208,7 +208,7 @@
         function visPersoner() {
             container.innerHTML = "";
             personer.feed.entry.forEach(person => {
-                if (filter == "alle" || filter == person.gsx$kategori.$t) {
+                if (filter == "menu" || filter == person.gsx$kategori.$t) {
 
                     console.log(person)
 
@@ -238,9 +238,6 @@
         }
 
         function visSingle(person) {
-            document.querySelector("#popup").style.display = "block";
-            document.querySelector("#popup .luk").addEventListener("click", lukSingle);
-
             document.querySelector(".enkeltPerson h2").textContent = person.gsx$navn.$t;
             document.querySelector(".enkeltPerson .billede").src = `imgs/large/${
                                 person.gsx$billede.$t
