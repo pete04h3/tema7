@@ -48,6 +48,28 @@
         width: 100%;
     }
 
+    @media screen and (min-width:1000px) {
+        .data-container {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .indhold {
+            width: 30%;
+        }
+
+        .luk {
+            position: absolute;
+            top: 72px;
+            left: 877px;
+            background-color: snow;
+            cursor: pointer;
+
+
+        }
+
+
+
+    }
 </style>
 
 
@@ -108,8 +130,5 @@
         document.querySelector(".luk").addEventListener("click", () => {
             history.back();
         })
-
     </script>
-</body>
-
-</html>
+</body></html>
