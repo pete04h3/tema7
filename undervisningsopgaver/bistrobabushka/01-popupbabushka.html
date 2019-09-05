@@ -139,6 +139,23 @@
             .data-container {
                 grid-template-columns: repeat(3, 1fr);
             }
+
+            .indhold {
+                width: 30%;
+
+            }
+
+            .luk {
+                margin: 0 auto;
+                position: absolute;
+                right: 504px;
+                top: 75px;
+                font-size: 1.5rem;
+                background-color: snow;
+
+            }
+
+
         }
     </style>
 
@@ -184,17 +201,19 @@
 
     <div id="popup">
         <button class="luk">X</button>
-        <section class="indhold">
-            <article class="enkeltPerson">
-                <h2></h2>
-                <img class="billede" src="" alt="">
-                <h4 class="underoverskrift">Beskrivelse:</h4>
-                <p class="lang"></p>
-                <h4>Oprindelse:</h4>
-                <p class="oprindelse"></p>
-                <p class="pris"></p>
-            </article>
-        </section>
+        <div class="lukpopup">
+            <section class="indhold">
+                <article class="enkeltPerson">
+                    <h2></h2>
+                    <img class="billede" src="" alt="">
+                    <h4 class="underoverskrift">Beskrivelse:</h4>
+                    <p class="lang"></p>
+                    <h4>Oprindelse:</h4>
+                    <p class="oprindelse"></p>
+                    <p class="pris"></p>
+                </article>
+            </section>
+        </div>
 
     </div>
 
@@ -254,6 +273,8 @@
         function visSingle(person) {
             document.querySelector("#popup").style.display = "block";
             document.querySelector("#popup .luk").addEventListener("click", lukSingle);
+            document.querySelector("#popup .lukpopup").addEventListener("click", lukSingle);
+
 
             document.querySelector(".enkeltPerson h2").textContent = person.gsx$navn.$t;
             document.querySelector(".enkeltPerson .billede").src = `imgs/large/${
